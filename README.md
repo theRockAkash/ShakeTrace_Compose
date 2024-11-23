@@ -1,7 +1,10 @@
 
-# ShakeTrace Library 📱 [![](https://jitpack.io/v/theRockAkash/ShakeTrace.svg)](https://jitpack.io/#theRockAkash/ShakeTrace)
+# ShakeTrace Compose Library 📱 [![](https://jitpack.io/v/theRockAkash/shaketrace.compose.svg)](https://jitpack.io/#theRockAkash/shaketrace.compose)
 
-ShakeTrace is a utility library for Android applications that provides an interactive way to log and view HTTP requests and responses. By simply shaking your device, you can trigger a display of the logged network calls. This can be particularly useful during the development and debugging stages.
+ShakeTrace Compose is a utility library for Android applications that provides an interactive way to log and view HTTP requests and responses. By simply shaking your device, you can trigger a display of the logged network calls. This can be particularly useful during the development and debugging stages.
+
+For XML-based applications, use [ShakeTrace](https://github.com/theRockAkash/ShakeTrace) for same features.
+
 
 ## Add dependencies in your project
 
@@ -17,9 +20,9 @@ dependencyResolutionManagement {
 ```
 
 #build.gradle file (app level)
-```groovy
+```kotlin
 dependencies {
-	implementation 'com.github.theRockAkash:ShakeTrace:latestVersion'  // replace with latest version e.g. 1.3.0
+	implementation("com.github.theRockAkash:shaketrace.compose:v1.5.0")  // replace with latest version 
    }
 ```
 
@@ -57,92 +60,9 @@ dependencies {
     }
 ```
 
-## Utility Functions 🛠️
-
-- **Toasty:** An easy way to show toast messages. It ensures that if there's already a toast message being displayed, it cancels it before showing the new one.
-
-	```kotlin
-	 Utils.toasty(this, "Button clicked!")
-	```
- 
-- **getFormattedDateTime(utcString: String,outputFormat:String):** Converts a UTC date string to another date format.
-
-	```kotlin
- 	val utcDateString = "2022-01-15T10:15:30.00Z"  // UTC date string
- 	val outputFormat = "dd MMM yyyy, hh:mm a"  // Desired output format
- 	val formattedDate = Utils.getFormattedDateTime(utcDateString, outputFormat)	
-  	println("Formatted date: $formattedDate")		// Output=> Formatted date: 15 Jan 2022, 10:15 AM
-	```
- 
-- **getFormattedDateTime(date: String,inputFormat:String,outputFormat:String):** Converts a date string from one format to another. For example, if you have a date in "15/01/2022" format and want to convert it to "15 Jan 2022", you can use this function.
-
-	```kotlin
-	val dateString = "15/01/2022"  // Date string
- 	val inputFormat = "dd/MM/yyyy"  // Input format
- 	val outputFormat = "dd MMM yyyy"  // Desired output format
-	val formattedDate = Utils.getFormattedDateTime(dateString, inputFormat, outputFormat)
- 	println("Formatted date: $formattedDate")	// Output=> Formatted date: 15 Jan 2022
-	```
-
-- **getError:** Extracts an error message from a `ResponseBody` object. This can be useful when handling network request errors.
-
-	```kotlin
-
-	fun showErrorToast(errorBody: okhttp3.ResponseBody?) {
- 	    val errorMessageKey = "error"
- 	    val errorMessage = Utils.getError(errorMessageKey, errorBody)
-	    Utils.toasty(this, errorMessage)
-	}
-	```
-
-These utility functions provide additional functionality to your application, making it easier to display toast messages and format date strings.
-
-## DataHelper Class 📦
-
-The `DataHelper` class is a sealed class used to represent different states during network calls. It has three subclasses: `Success`, `Error`, and `Loading`. Each subclass represents a different state of a data operation:
-
-- **Success:** Represents a successful operation and contains the resulting data.
-- **Error:** Represents a failed operation and contains an error message.
-- **Loading:** Represents an operation in progress.
-
-```kotlin
-
-val commonResponseLiveData by lazy { MutableLiveData<DataHelper<CommonResponse>>() }
-
-suspend fun isUserActive(
-    req: Long
-) {
-    if (!networkManager.isNetworkAvailable()) {
-        commonResponseLiveData.postValue(DataHelper.Error("No Internet Connection"))
-        return
-    }
-    commonResponseLiveData.postValue(DataHelper.Loading())
-
-    val response = api.isUserActive(req)
-    if (response.isSuccessful && response.body()?.status == true) {
-        commonResponseLiveData.postValue(DataHelper.Success(response.body()!!))
-    } else if (response.body()?.message != null) {
-        commonResponseLiveData.postValue(DataHelper.Error(response.body()!!.message))
-    } else commonResponseLiveData.postValue(DataHelper.Error(Utils.getError("message",response.errorBody())))
-
-    }
-
-// Observe the response
-commonResponseLiveData.observe(this) {
-    when (it) {
-        is DataHelper.Error -> {res->
-            Utils.toasty(this, res.msg)
-        }
-        is DataHelper.Loading -> { }
-        is DataHelper.Success -> {res-> }
-    }
-```
-
-This class can be used independently to handle different states of network calls in your app.
-
 ## Note 📝
 
-While the logging feature of this library is intended for development and debugging purposes and should be disabled in production builds, the utility functions (like toasty, getFormattedDateTime, and getError) & DataHelper Class are designed to be used in both development and production environments.
+While the logging feature of this library is intended for development and debugging purposes and should be disabled in production builds.
 
 
 
