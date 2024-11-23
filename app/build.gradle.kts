@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.therockakash.shaketrace.compose.sample"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.therockakash.shaketrace.compose.sample"
