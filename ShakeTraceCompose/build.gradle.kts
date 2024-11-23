@@ -11,8 +11,7 @@ android {
 
     defaultConfig {
         minSdk = 21
-        versionCode = 3
-        versionName = "1.3.0"
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -43,43 +42,18 @@ dependencies {
     implementation("androidx.compose.material3:material3-android:1.3.1")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
 }
+afterEvaluate {
 
-publishing {
-    publications {
-        create<MavenPublication>("release") {
-            from(components["release"])
-            groupId = "com.github.theRockAkash" // Your group ID (typically your domain)
-            artifactId = "ShakeTraceCompose" // Your library name
-            version = "1.3.0" // Library version (this should match the tag)
+    publishing {
+        publications {
+            create<MavenPublication>("maven") {
+                groupId = "com.github.theRockAkash"
+                artifactId = "ShakeTraceCompose"
+                version = "1.4.0"
 
-            pom {
-                name.set("ShakeTraceCompose")
-                description.set("An Android Compose library for logging network requests and responses. Also enables shake to view logs.")
-                url.set("https://github.com/theRockAkash/shaketrace.compose")
-                licenses {
-                    license {
-                        name.set("Apache License 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("theRockAkash")
-                        name.set("Akash")
-                        email.set("therockakash77@gmail.com")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:https://github.com/theRockAkash/shaketrace.compose.git")
-                    developerConnection.set("scm:git:https://github.com/theRockAkash/shaketrace.compose.git")
-                    url.set("https://github.com/theRockAkash/shaketrace.compose")
-                }
+                from(components["release"])
             }
         }
     }
-    repositories {
-        maven {
-            url = uri("https://jitpack.io")
-        }
-    }
+
 }
